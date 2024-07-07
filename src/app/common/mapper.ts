@@ -7,7 +7,6 @@ export class Mapper {
     const data = new ChartData();
     data.labels = expenses.map(expense => expense.title);
     data.dataset.data = expenses.map(expense => expense.item);
-    data.dataset.label = 'Expenses';
 
     return data;
   }

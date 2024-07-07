@@ -1,8 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {ChartCreatorService} from "../../service/chart-creator.service";
 import {DashboardService} from "../../service/dashboard.service";
 import {Chart} from "chart.js/auto";
-import {ChartType} from "../../model/chart/chart.type";
+import {ChartBuilder} from "../../common/chart.builder";
+import {ListResult} from "../../model/api/list.result";
+import {AggregatedExpense} from "../../model/api/aggregated.expense";
+import {Mapper} from "../../common/mapper";
 
 @Component({
   selector: 'app-chart',
@@ -14,14 +16,32 @@ import {ChartType} from "../../model/chart/chart.type";
 export class ChartComponent implements OnInit {
   public chart?: Chart;
 
-  constructor(private chartCreatorService: ChartCreatorService, private dashboardService: DashboardService) {
+  constructor(private dashboardService: DashboardService) {
   }
 
   ngOnInit(): void {
     this.dashboardService.getAggregatedExpensesForLastMonth()
       .subscribe({
-        next: value => this.chart = this.chartCreatorService.create('chart', ChartType.Line, value),
-        error: e => console.error(e),
+        next: value => this.createChart(value),
+        error: e => {
+          alert('Something went wrong!');
+          console.error(e);
+        },
       })
   }
+
+  private createChart(listResult: ListResult<AggregatedExpense>) {
+    const {
+      labels,
+      dataset
+    } = Mapper.toChartData(listResult.data);
+
+    this.chart = ChartBuilder.newBuilder('chart', 'line')
+      .aspectRatio(2.5)
+      .backgroundColor('blue')
+      .labels(labels)
+      .dataset(dataset, 'Expenses')
+      .build();
+  }
+
 }

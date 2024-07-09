@@ -1,4 +1,4 @@
 export class Dataset {
-  label: string = '';
+  label = '';
   data: number[] = [];
 }

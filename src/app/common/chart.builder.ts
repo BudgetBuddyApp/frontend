@@ -1,12 +1,12 @@
-import {ChartType} from "chart.js";
-import {Chart} from "chart.js/auto";
+import { ChartType } from 'chart.js';
+import { Chart } from 'chart.js/auto';
 
 interface Builder {
   label(value: string): this;
 
   labels(values: string[]): this;
 
-  dataset(value: { label: string, data: number[] }, label?: string): this;
+  dataset(value: { label: string; data: number[] }, label?: string): this;
 
   aspectRatio(value: number): this;
 
@@ -21,9 +21,9 @@ export class ChartBuilder implements Builder {
       type: type,
       data: {
         labels: [],
-        datasets: []
+        datasets: [],
       },
-      options: {}
+      options: {},
     });
   }
 
@@ -37,7 +37,7 @@ export class ChartBuilder implements Builder {
   }
 
   aspectRatio(value: number): this {
-    this.chart.options.aspectRatio = 2.5;
+    this.chart.options.aspectRatio = value;
     return this;
   }
 
@@ -46,7 +46,7 @@ export class ChartBuilder implements Builder {
     return this;
   }
 
-  dataset(value: { label: string, data: number[] }, label?: string): this {
+  dataset(value: { label: string; data: number[] }, label?: string): this {
     const length = this.chart?.data?.datasets.push(value);
     if (label) {
       this.chart.data.datasets[length - 1].label = label;
@@ -63,5 +63,4 @@ export class ChartBuilder implements Builder {
   build() {
     return this.chart;
   }
-
 }

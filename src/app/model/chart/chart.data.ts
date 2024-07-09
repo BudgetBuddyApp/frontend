@@ -1,4 +1,4 @@
-import {Dataset} from "./dataset";
+import { Dataset } from './dataset';
 
 export class ChartData {
   labels: string[] = [];

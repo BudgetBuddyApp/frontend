@@ -1,18 +1,21 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {ListResult} from "../model/api/list.result";
-import {AggregatedExpense} from "../model/api/aggregated.expense";
-import {Observable} from "rxjs";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '@env/environment';
+import { ListResult } from '@app/model/api/list.result';
+import { AggregatedExpense } from '@app/model/api/aggregated.expense';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DashboardService {
+  private readonly API = environment.API;
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
-  getAggregatedExpensesForLastMonth(): Observable<ListResult<AggregatedExpense>> {
-    return this.http.get<ListResult<AggregatedExpense>>('http://localhost:3000/expenses');
+  getAggregatedExpensesForLastMonth(): Observable<
+    ListResult<AggregatedExpense>
+  > {
+    return this.http.get<ListResult<AggregatedExpense>>(`${this.API}/expenses`);
   }
 }

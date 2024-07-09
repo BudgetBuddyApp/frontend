@@ -1,4 +1,4 @@
 export interface AggregatedExpense {
   title: string;
-  item: number
+  item: number;
 }

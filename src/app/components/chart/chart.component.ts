@@ -1,40 +1,35 @@
-import {Component, OnInit} from '@angular/core';
-import {DashboardService} from "../../service/dashboard.service";
-import {Chart} from "chart.js/auto";
-import {ChartBuilder} from "../../common/chart.builder";
-import {ListResult} from "../../model/api/list.result";
-import {AggregatedExpense} from "../../model/api/aggregated.expense";
-import {Mapper} from "../../common/mapper";
+import { Component, OnInit } from '@angular/core';
+import { DashboardService } from '@app/service/dashboard.service';
+import { Chart } from 'chart.js/auto';
+import { ChartBuilder } from '@app/common/chart.builder';
+import { Mapper } from '@app/common/mapper';
+import { ListResult } from '@app/model/api/list.result';
+import { AggregatedExpense } from '@app/model/api/aggregated.expense';
 
 @Component({
   selector: 'app-chart',
   standalone: true,
   imports: [],
   templateUrl: './chart.component.html',
-  styleUrl: './chart.component.css'
+  styleUrl: './chart.component.css',
 })
 export class ChartComponent implements OnInit {
   public chart?: Chart;
 
-  constructor(private dashboardService: DashboardService) {
-  }
+  constructor(private dashboardService: DashboardService) {}
 
   ngOnInit(): void {
-    this.dashboardService.getAggregatedExpensesForLastMonth()
-      .subscribe({
-        next: value => this.createChart(value),
-        error: e => {
-          alert('Something went wrong!');
-          console.error(e);
-        },
-      })
+    this.dashboardService.getAggregatedExpensesForLastMonth().subscribe({
+      next: value => this.createChart(value),
+      error: e => {
+        alert('Something went wrong!');
+        console.error(e);
+      },
+    });
   }
 
   private createChart(listResult: ListResult<AggregatedExpense>) {
-    const {
-      labels,
-      dataset
-    } = Mapper.toChartData(listResult.data);
+    const { labels, dataset } = Mapper.toChartData(listResult.data);
 
     this.chart = ChartBuilder.newBuilder('chart', 'line')
       .aspectRatio(2.5)
@@ -43,5 +38,4 @@ export class ChartComponent implements OnInit {
       .dataset(dataset, 'Expenses')
       .build();
   }
-
 }

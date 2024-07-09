@@ -1,0 +1,6 @@
+.container_dashboard {
+  max-width: 1470px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 110px;
+}

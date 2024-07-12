@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, retry } from 'rxjs';
 import { environment } from '@env/environment';
 import { ListResult } from '@app/model/api/list.result';
 import { AggregatedExpense } from '@app/model/api/aggregated.expense';
@@ -16,6 +16,8 @@ export class DashboardService {
   getAggregatedExpensesForLastMonth(): Observable<
     ListResult<AggregatedExpense>
   > {
-    return this.http.get<ListResult<AggregatedExpense>>(`${this.API}/expenses`);
+    return this.http
+      .get<ListResult<AggregatedExpense>>(`${this.API}/expenses`)
+      .pipe(retry(2));
   }
 }

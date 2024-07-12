@@ -3,8 +3,10 @@ import { DashboardService } from '@app/service/dashboard.service';
 import { Chart } from 'chart.js/auto';
 import { ChartBuilder } from '@app/common/chart.builder';
 import { Mapper } from '@app/common/mapper';
-import { ListResult } from '@app/model/api/list.result';
 import { AggregatedExpense } from '@app/model/api/aggregated.expense';
+import { catchError, of } from 'rxjs';
+import { ListResult } from '@app/model/api/list.result';
+import { emptyListResult } from '@app/model/api/empty.list.result';
 
 @Component({
   selector: 'app-chart',
@@ -19,13 +21,18 @@ export class ChartComponent implements OnInit {
   constructor(private dashboardService: DashboardService) {}
 
   ngOnInit(): void {
-    this.dashboardService.getAggregatedExpensesForLastMonth().subscribe({
-      next: value => this.createChart(value),
-      error: e => {
-        alert('Something went wrong!');
-        console.error(e);
-      },
-    });
+    this.dashboardService
+      .getAggregatedExpensesForLastMonth()
+      .pipe(
+        catchError(err => {
+          console.error(err);
+          alert(err.statusText);
+          return of(emptyListResult);
+        })
+      )
+      .subscribe({
+        next: value => this.createChart(value),
+      });
   }
 
   private createChart(listResult: ListResult<AggregatedExpense>) {

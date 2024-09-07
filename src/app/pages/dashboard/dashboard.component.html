@@ -1,4 +1,8 @@
-<div class="container_dashboard">
-  <app-chart/>
-  <app-add-expense/>
+<div class="wrapper">
+  <app-line-chart [expenses]="expenses()"/>
+
+  <div class="wrapper_btn">
+    <button class="btn" (click)="openDialog()">Add expense</button>
+  </div>
+
 </div>

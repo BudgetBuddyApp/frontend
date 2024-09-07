@@ -1,0 +1,30 @@
+<form>
+  <mat-form-field class="category-chip-list" appearance="outline">
+    <mat-label>Categories</mat-label>
+    <mat-chip-grid #chipGrid aria-label="Category selection">
+      @for (category of categories(); track $index) {
+        <mat-chip-row (removed)="remove(category)">
+          {{ category }}
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+      }
+    </mat-chip-grid>
+
+    <input
+      name="currentCategory"
+      placeholder="New category..."
+      [(ngModel)]="currentCategory"
+      [matChipInputFor]="chipGrid"
+      [matAutocomplete]="auto"
+      [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+      (matChipInputTokenEnd)="add($event)"
+    />
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+      @for (category of filteredCategories(); track category) {
+        <mat-option [value]="category">{{ category }}</mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+</form>
